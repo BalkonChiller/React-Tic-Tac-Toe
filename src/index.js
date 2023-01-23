@@ -60,7 +60,7 @@ class Game extends React.Component {
     super(props);
     this.state = {
       history: [{ squares: Array(9).fill(null) }],
-      changed_squares: [],
+      changed_squares: [null],
       xIsNext: true,
       stepCount: 0,
     };
@@ -95,7 +95,7 @@ class Game extends React.Component {
   }
 
   render() {
-    //debugger;
+    debugger;
     const history = this.state.history;
     const current = history[this.state.stepCount];
     const winner = calculateWinner(current.squares);
@@ -103,12 +103,12 @@ class Game extends React.Component {
 
     const moves = history.map((step, move) => {
 
-      const last_changed = changed_squares[changed_squares.length - 1]
+      const square_changed = changed_squares[move]
       let changed_col,
         changed_row = null;
-      if (!isNaN(last_changed)) {
-        changed_col = Math.floor(last_changed / 3) + 1;
-        changed_row = (last_changed % 3) + 1;
+      if (!isNaN(square_changed)) {
+        changed_col = Math.floor(square_changed / 3) + 1;
+        changed_row = (square_changed % 3) + 1;
       }
 
       const desc = move
