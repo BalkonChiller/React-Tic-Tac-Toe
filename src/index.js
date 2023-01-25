@@ -108,10 +108,8 @@ class Game extends React.Component {
       const square_changed = changed_squares[move];
       let changed_col,
         changed_row = null;
-      if (!isNaN(square_changed)) {
         changed_col = (square_changed % 3) + 1;
         changed_row = Math.floor(square_changed / 3) + 1;
-      }
 
       const desc = move
         ? "Go to move #" +
@@ -134,7 +132,6 @@ class Game extends React.Component {
         </li>
       );
     });
-    console.log(moves);
     let status;
     if (winner) {
       status = "Winner: " + winner;
