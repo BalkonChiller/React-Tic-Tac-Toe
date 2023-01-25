@@ -70,7 +70,10 @@ class Game extends React.Component {
     const history = this.state.history.slice(0, this.state.stepCount + 1);
     const current = history[history.length - 1];
     const squares = current.squares.slice();
-    const changed_squares = this.state.changed_squares.slice(0, this.state.stepCount + 1);
+    const changed_squares = this.state.changed_squares.slice(
+      0,
+      this.state.stepCount + 1
+    );
 
     if (calculateWinner(squares) || squares[i]) {
       return;
@@ -102,26 +105,32 @@ class Game extends React.Component {
     const changed_squares = this.state.changed_squares;
 
     const moves = history.map((step, move) => {
-
-      const square_changed = changed_squares[move]
+      const square_changed = changed_squares[move];
       let changed_col,
         changed_row = null;
       if (!isNaN(square_changed)) {
-        changed_col = Math.floor(square_changed / 3) + 1;
-        changed_row = (square_changed % 3) + 1;
+        changed_col = (square_changed % 3) + 1;
+        changed_row = Math.floor(square_changed / 3) + 1;
       }
 
       const desc = move
         ? "Go to move #" +
           move +
-          " @ col:" +
+          " @ col: " +
           changed_col +
           " row: " +
           changed_row
         : "Go to game start";
+      let button_filling;
+      if (this.state.stepCount === move) {
+        button_filling = <b>{desc}</b>;
+      } else {
+        button_filling =  desc ;
+      }
+
       return (
         <li key={move}>
-          <button onClick={() => this.jumpTo(move)}>{desc}</button>
+          <button onClick={() => this.jumpTo(move)}>{button_filling}</button>
         </li>
       );
     });
