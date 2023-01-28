@@ -27,31 +27,28 @@ class Board extends React.Component {
     return (
       <Square
         value={this.props.squares[i]}
-        onClick={() => this.props.onClick(i)} //handleClick(i)}
+        onClick={() => this.props.onClick(i)}
+        key={i} //handleClick(i)}
       />
     );
   }
 
   render() {
-    return (
-      <div>
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
+    let square_board = [];
+    let i = 0;
+    for (let row_count = 0; row_count < 3; row_count++) {
+      let row_squares = [];
+      for (let col_count = 0; col_count < 3; col_count++, i++) {
+        row_squares.push(this.renderSquare(i));
+      }
+      square_board.push(
+        <div className="board-row" key={row_count}>
+          {row_squares}
         </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
-      </div>
-    );
+      );
+    }
+
+    return <div>{square_board}</div>;
   }
 }
 
@@ -108,8 +105,8 @@ class Game extends React.Component {
       const square_changed = changed_squares[move];
       let changed_col,
         changed_row = null;
-        changed_col = (square_changed % 3) + 1;
-        changed_row = Math.floor(square_changed / 3) + 1;
+      changed_col = (square_changed % 3) + 1;
+      changed_row = Math.floor(square_changed / 3) + 1;
 
       const desc = move
         ? "Go to move #" +
@@ -123,7 +120,7 @@ class Game extends React.Component {
       if (this.state.stepCount === move) {
         button_filling = <b>{desc}</b>;
       } else {
-        button_filling =  desc ;
+        button_filling = desc;
       }
 
       return (
@@ -132,6 +129,7 @@ class Game extends React.Component {
         </li>
       );
     });
+
     let status;
     if (winner) {
       status = "Winner: " + winner;
