@@ -5,11 +5,15 @@ import "./index.css";
 /*
 Look here: https://reactjs.org/tutorial/tutorial.html#passing-data-through-props   
 TO-DO: Taking Turns [x]
+
 */
 
 function Square(props) {
   return (
-    <button className="square" onClick={props.onClick}>
+    <button
+      className={props.isWinner ? "square winner-square" : "square"}
+      onClick={props.onClick}
+    >
       {props.value}
     </button>
   );
@@ -36,7 +40,8 @@ class Board extends React.Component {
       <Square
         value={this.props.squares[i]}
         onClick={() => this.props.onClick(i)}
-        key={i} //handleClick(i)}
+        key={"Square-" + i}
+        isWinner={this.props.winnerSquares.includes(i)}
       />
     );
   }
@@ -73,7 +78,6 @@ class Game extends React.Component {
   }
 
   changeOrderClick(current_order) {
-    console.log("This is a test " + current_order);
     this.setState({
       orderIsAsc: !current_order,
     });
@@ -113,9 +117,9 @@ class Game extends React.Component {
   render() {
     const history = this.state.history;
     const current = history[this.state.stepCount];
-    const winner = calculateWinner(current.squares);
+    const obj_win_calc = calculateWinner(current.squares);
     const changed_squares = this.state.changed_squares;
-
+  
     let moves = history.map((step, move) => {
       const square_changed = changed_squares[move];
       let changed_col = (square_changed % 3) + 1;
@@ -148,8 +152,8 @@ class Game extends React.Component {
     }
 
     let status;
-    if (winner) {
-      status = "Winner: " + winner;
+    if (obj_win_calc) {
+      status = "Winner: " + String(obj_win_calc.winner);
     } else {
       status = "Next player: " + (this.state.xIsNext ? "X" : "O");
     }
@@ -160,6 +164,7 @@ class Game extends React.Component {
           <Board
             squares={current.squares}
             onClick={(i) => this.handleClick(i)}
+            winnerSquares={obj_win_calc ? obj_win_calc.winLine : []}
           />
         </div>
         <div className="game-info">
@@ -168,7 +173,11 @@ class Game extends React.Component {
           <div>
             <ChangeOrderButton
               onClick={() => this.changeOrderClick(this.state.orderIsAsc)}
-              desc = {this.state.orderIsAsc ? "Make Order Descending" : "Make Order Ascending"}
+              desc={
+                this.state.orderIsAsc
+                  ? "Make Order Descending"
+                  : "Make Order Ascending"
+              }
             />
           </div>
         </div>
@@ -196,7 +205,10 @@ function calculateWinner(squares) {
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
+      return {
+        winner: squares[a],
+        winLine: lines[i],
+      };
     }
   }
   return null;
