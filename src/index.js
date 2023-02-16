@@ -120,7 +120,7 @@ class Game extends React.Component {
     const current = history[this.state.stepCount];
     const obj_win_calc = calculateWinner(current.squares);
     const changed_squares = this.state.changed_squares;
-  
+
     let moves = history.map((step, move) => {
       const square_changed = changed_squares[move];
       let changed_col = (square_changed % 3) + 1;
@@ -151,12 +151,12 @@ class Game extends React.Component {
     if (!this.state.orderIsAsc) {
       moves = moves.slice(0, moves.length).reverse();
     }
-    console.log(this.state.stepCount)
+    console.log(this.state.stepCount);
     let status;
     if (obj_win_calc) {
       status = "Winner: " + String(obj_win_calc.winner);
-    } else if(this.state.stepCount === 9) {
-      status = "Its a draw!"
+    } else if (this.state.stepCount === 9) {
+      status = "Its a draw!";
     } else {
       status = "Next player: " + (this.state.xIsNext ? "X" : "O");
     }
